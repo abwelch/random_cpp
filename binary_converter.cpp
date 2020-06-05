@@ -12,6 +12,7 @@ int main()
 	std::cout << "*** Binary to ASCII converter ***\n\n";
 	std::ifstream input_file;
 	ValidateFile(input_file);
+	std::cin.ignore();
 	if (Spaces())
 	{
 		ConvertWithSpaces(input_file);
@@ -27,6 +28,7 @@ int main()
 void ValidateFile(std::ifstream& input_file)
 {
 	bool first_pass = true;
+	bool file_opened = true;
 	std::string filename = "";
 	do
 	{
@@ -38,7 +40,12 @@ void ValidateFile(std::ifstream& input_file)
 		std::cout << "Enter the filename you wish to process: ";
 		std::cin >> filename;
 		input_file.open(filename);
-	} while (!input_file.is_open());
+		file_opened = input_file.is_open();
+		if (!file_opened)
+		{
+			first_pass = false;
+		}
+	} while (!file_opened);
 }
 
 bool Spaces()
