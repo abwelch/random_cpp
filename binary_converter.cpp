@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <exception>
 
 void ValidateFile(std::ifstream&);
 bool Spaces();
@@ -79,7 +80,64 @@ bool Spaces()
 
 void Convert(std::ifstream& file)
 {
+	std::string wholeFile = "";
+	std::string byte = "";
+	short binaryTotal = 0;
+	char asciiValue;
+	std::ofstream convertedFile;
+	convertedFile.open("converted.txt");
+	std::getline(file, wholeFile);
+	for (int i = 0; wholeFile[i] != '\0'; i += 8)
+	{
+		try 
+		{
+			byte = wholeFile.substr(i, 8);
+		}
+		catch (std::exception e) 
+		{
+			std::cout << "ERROR: file is invalid!\n";
+			convertedFile.close();
+			return;
+		}
 
+		for (int i = 0; i < 8; ++i)
+		{
+			if (byte[i] != '0')
+			{
+				switch (i)
+				{
+					case 0:
+						binaryTotal += 128;
+						break;
+					case 1:
+						binaryTotal += 64;
+						break;
+					case 2:
+						binaryTotal += 32;
+						break;
+					case 3:
+						binaryTotal += 16;
+						break;
+					case 4:
+						binaryTotal += 8;
+						break;
+					case 5:
+						binaryTotal += 4;
+						break;
+					case 6:
+						binaryTotal += 2;
+						break;
+					case 7:
+						binaryTotal += 1;
+						break;
+				}
+			}
+		}
+		asciiValue = binaryTotal;
+		convertedFile << asciiValue;
+		binaryTotal = 0;
+	}
+	convertedFile.close();
 }
 
 void ConvertWithSpaces(std::ifstream& file)
