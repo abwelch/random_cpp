@@ -84,5 +84,49 @@ void Convert(std::ifstream& file)
 
 void ConvertWithSpaces(std::ifstream& file)
 {
-
+	std::string byte = "";
+	short binaryTotal = 0;
+	char asciiValue;
+	std::ofstream convertedFile;
+	convertedFile.open("converted.txt");
+	while (file >> byte)
+	{
+		for (int i = 0; i < 8; ++i)
+		{
+			if (byte[i] != '0')
+			{
+				switch (i)
+				{
+					case 0:
+						binaryTotal += 128;
+						break;
+					case 1:
+						binaryTotal += 64;
+						break;
+					case 2:
+						binaryTotal += 32;
+						break;
+					case 3:
+						binaryTotal += 16;
+						break;
+					case 4:
+						binaryTotal += 8;
+						break;
+					case 5:
+						binaryTotal += 4;
+						break;
+					case 6:
+						binaryTotal += 2;
+						break;
+					case 7:
+						binaryTotal += 1;
+						break;
+				}
+			}
+		}
+		asciiValue = binaryTotal;
+		convertedFile << asciiValue;
+		binaryTotal = 0;
+	}
+	convertedFile.close();
 }
